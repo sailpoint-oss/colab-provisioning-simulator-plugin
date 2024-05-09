@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE sailpoint PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<sailpoint>
+  <IntegrationConfig name='ProvisioningSimulation' executor='pro.jakubiak.provisioning.simulator.ProvisioningExecutor' execStyle='synchronous'>
+    <Attributes>
+      <Map>
+        <entry key="appConfig">
+          <value>
+            <Map>
+              <entry key="TestSQL">
+                <value>
+                  <Map>
+                    <entry key="filterConfig">
+                      <value>
+                        <Map>
+                          <entry key="Create">
+                            <value>
+                              <List>
+                                <String>username</String>
+                                <String>name</String>
+                              </List>
+                            </value>
+                          </entry>
+                          <entry key="Modify">
+                            <value>
+                              <List>
+                                <String>first_name</String>
+                                <String>name</String>
+                              </List>
+                            </value>
+                          </entry>
+                        </Map>
+                      </value>
+                    </entry>
+                  </Map>
+                </value>
+              </entry>
+            </Map>
+          </value>
+        </entry>
+        <entry key="integrationConfig">
+          <value>
+            <Map>
+              <entry key="disableProvisioning" value="false"/>
+              <entry key="saveUnfilteredRecords" value="true"/>
+              <entry key="enableWhitelisting" value="true"/>
+              <entry key="storeAdditionalId" value="true"/>
+              <entry key="additionalIdAttributeName" value="city"/>
+            </Map>
+          </value>
+        </entry>
+      </Map>
+    </Attributes>
+    <ManagedResources>
+      <ManagedResource>
+        <ApplicationRef>
+          <Reference class="sailpoint.object.Application" name="TestSQL"/>
+        </ApplicationRef>
+      </ManagedResource>
+    </ManagedResources>
+</IntegrationConfig>
+</sailpoint>
+
