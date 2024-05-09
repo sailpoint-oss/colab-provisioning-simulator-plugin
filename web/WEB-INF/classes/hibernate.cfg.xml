@@ -1,0 +1,429 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+          "-//Hibernate/Hibernate Configuration DTD//EN"
+          "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<!-- (c) Copyright 2008 SailPoint Technologies, Inc., All Rights Reserved. -->
+
+<hibernate-configuration>
+  <session-factory>
+    <!--
+        May want to explore these:
+            hibernate.jdbc.use_scrollable_resultset=false
+            hibernate.cache.use_query_cache=false
+                  
+            Query cache is effetive for parameterized statements that
+            are used often.
+    -->
+
+    <property name="hibernate.cache.use_second_level_cache">true</property>
+    <property name="hibernate.cache.use_query_cache">true</property>
+    <property name="hibernate.javax.cache.missing_cache_strategy">create</property>
+
+    <!--  Modified to support ehcache v3.8.1 -->
+    <property name="hibernate.cache.region.factory_class">org.hibernate.cache.jcache.JCacheRegionFactory</property>
+    <property name="hibernate.javax.cache.provider">org.ehcache.jsr107.EhcacheCachingProvider</property>
+    <property name="hibernate.javax.cache.uri">ehcache.xml</property>
+
+  <!-- TODO: Do we want this enabled OOTB -->
+    <property name="hibernate.generate_statistics">true</property>
+
+      <!-- mapping files -->
+    <mapping resource="sailpoint/object/AbstractCertificationItem.hbm.xml"/> 
+    <mapping resource="sailpoint/object/AccountGroup.hbm.xml"/>
+    <mapping resource="sailpoint/object/ActivityConstraint.hbm.xml"/>
+    <mapping resource="sailpoint/object/ActivityDataSource.hbm.xml"/>
+    <mapping resource="sailpoint/object/Alert.hbm.xml"/>
+    <mapping resource="sailpoint/object/AlertAction.hbm.xml"/>
+    <mapping resource="sailpoint/object/AlertDefinition.hbm.xml"/>
+    <mapping resource="sailpoint/object/Application.hbm.xml"/>
+    <mapping resource="sailpoint/object/ApplicationActivity.hbm.xml"/>
+    <mapping resource="sailpoint/object/ApplicationScorecard.hbm.xml"/>
+    <mapping resource="sailpoint/object/ArchivedCertificationEntity.hbm.xml"/>
+    <mapping resource="sailpoint/object/ArchivedCertificationItem.hbm.xml"/>
+    <mapping resource="sailpoint/object/Attachment.hbm.xml"/>
+    <mapping resource="sailpoint/object/AuditConfig.hbm.xml"/>
+    <mapping resource="sailpoint/object/AuditEvent.hbm.xml"/>
+    <mapping resource="sailpoint/object/AuthenticationAnswer.hbm.xml"/>
+    <mapping resource="sailpoint/object/AuthenticationQuestion.hbm.xml"/>
+    <mapping resource="sailpoint/object/BatchRequest.hbm.xml"/>
+    <mapping resource="sailpoint/object/BatchRequestItem.hbm.xml"/>
+    <mapping resource="sailpoint/object/Bundle.hbm.xml"/>
+    <mapping resource="sailpoint/object/BundleArchive.hbm.xml"/>
+    <mapping resource="sailpoint/object/BundleProfileRelation.hbm.xml"/>
+    <mapping resource="sailpoint/object/BundleProfileRelationObject.hbm.xml"/>
+    <mapping resource="sailpoint/object/BundleProfileRelationStep.hbm.xml"/>
+    <mapping resource="sailpoint/object/BulkIdJoin.hbm.xml"/>
+    <mapping resource="sailpoint/object/Category.hbm.xml"/>
+    <mapping resource="sailpoint/object/Capability.hbm.xml"/>
+    <mapping resource="sailpoint/object/Certification.hbm.xml"/>
+    <mapping resource="sailpoint/object/CertificationArchive.hbm.xml"/>
+    <mapping resource="sailpoint/object/CertificationEntity.hbm.xml"/>
+    <mapping resource="sailpoint/object/CertificationItem.hbm.xml"/>
+    <mapping resource="sailpoint/object/CertificationAction.hbm.xml"/>
+    <mapping resource="sailpoint/object/CertificationChallenge.hbm.xml"/>
+    <mapping resource="sailpoint/object/CertificationDefinition.hbm.xml"/>
+    <mapping resource="sailpoint/object/CertificationDelegation.hbm.xml"/>
+    <mapping resource="sailpoint/object/CertificationGroup.hbm.xml"/>
+    <mapping resource="sailpoint/object/Classification.hbm.xml"/>
+    <mapping resource="sailpoint/object/CloudAccess3Way.hbm.xml"/>
+    <mapping resource="sailpoint/object/CloudAccessGroup.hbm.xml"/>
+    <mapping resource="sailpoint/object/CloudAccessRole.hbm.xml"/>
+    <mapping resource="sailpoint/object/CloudAccessScope.hbm.xml"/>
+    <mapping resource="sailpoint/object/CorrelationConfig.hbm.xml"/>
+    <mapping resource="sailpoint/object/SPRight.hbm.xml"/>
+    <mapping resource="sailpoint/object/Configuration.hbm.xml"/>
+    <mapping resource="sailpoint/object/Custom.hbm.xml"/>
+    <mapping resource="sailpoint/object/DatabaseVersion.hbm.xml"/>
+    <mapping resource="sailpoint/object/Dictionary.hbm.xml"/>
+    <mapping resource="sailpoint/object/DictionaryTerm.hbm.xml"/>
+    <mapping resource="sailpoint/object/DynamicScope.hbm.xml"/>
+    <mapping resource="sailpoint/object/EmailTemplate.hbm.xml"/>
+    <mapping resource="sailpoint/object/EntitlementGroup.hbm.xml"/>
+    <mapping resource="sailpoint/object/EntitlementSnapshot.hbm.xml"/>
+    <mapping resource="sailpoint/object/FileBucket.hbm.xml"/>
+    <mapping resource="sailpoint/object/Form.hbm.xml"/>
+    <mapping resource="sailpoint/object/FullTextIndex.hbm.xml"/>
+    <mapping resource="sailpoint/object/GenericConstraint.hbm.xml"/>
+    <mapping resource="sailpoint/object/GroupFactory.hbm.xml"/>
+    <mapping resource="sailpoint/object/GroupDefinition.hbm.xml"/>
+    <mapping resource="sailpoint/object/GroupIndex.hbm.xml"/>
+    <mapping resource="sailpoint/object/InterceptedDelete.hbm.xml"/>
+    <mapping resource="sailpoint/object/Identity.hbm.xml"/>
+    <mapping resource="sailpoint/object/IdentityArchive.hbm.xml"/>
+    <mapping resource="sailpoint/object/IdentityEntitlement.hbm.xml"/>
+    <mapping resource="sailpoint/object/IdentityExternalAttribute.hbm.xml"/>
+    <mapping resource="sailpoint/object/IdentityHistoryItem.hbm.xml"/>
+    <mapping resource="sailpoint/object/IdentityRequest.hbm.xml"/> 
+    <mapping resource="sailpoint/object/IdentityRequestItem.hbm.xml"/>
+    <mapping resource="sailpoint/object/IdentitySnapshot.hbm.xml"/> 
+    <mapping resource="sailpoint/object/IdentityTrigger.hbm.xml"/>
+    <mapping resource="sailpoint/object/IntegrationConfig.hbm.xml"/>
+    <mapping resource="sailpoint/object/JasperPageBucket.hbm.xml"/>
+    <mapping resource="sailpoint/object/JasperTemplate.hbm.xml"/>
+    <mapping resource="sailpoint/object/JasperResult.hbm.xml"/>
+    <mapping resource="sailpoint/object/Link.hbm.xml"/>
+    <mapping resource="sailpoint/object/DeletedObject.hbm.xml"/>
+    <mapping resource="sailpoint/object/LinkExternalAttribute.hbm.xml"/>
+    <mapping resource="sailpoint/object/LocalizedAttribute.hbm.xml"/>
+    <mapping resource="sailpoint/object/ManagedAttribute.hbm.xml"/>
+    <mapping resource="sailpoint/object/Module.hbm.xml"/>
+    <mapping resource="sailpoint/object/MiningConfig.hbm.xml"/>
+    <mapping resource="sailpoint/object/MitigationExpiration.hbm.xml"/>
+    <mapping resource="sailpoint/object/MessageTemplate.hbm.xml"/>
+    <mapping resource="sailpoint/object/MonitoringStatistic.hbm.xml"/>
+    <mapping resource="sailpoint/object/NamedTimestamp.hbm.xml"/>
+    <mapping resource="sailpoint/object/NativeIdentityChangeEvent.hbm.xml"/>
+    <mapping resource="sailpoint/object/ObjectClassification.hbm.xml"/>
+    <mapping resource="sailpoint/object/ObjectConfig.hbm.xml"/>
+    <mapping resource="sailpoint/object/PartitionResult.hbm.xml"/>
+    <mapping resource="sailpoint/object/PasswordPolicy.hbm.xml"/>
+    <mapping resource="sailpoint/object/PasswordPolicyHolder.hbm.xml"/>
+    <mapping resource="sailpoint/object/PendingRequestAttachment.hbm.xml"/>
+    <mapping resource="sailpoint/object/PersistedFile.hbm.xml"/>
+    <mapping resource="sailpoint/object/Plugin.hbm.xml"/>
+    <mapping resource="sailpoint/object/Policy.hbm.xml"/>
+    <mapping resource="sailpoint/object/PolicyViolation.hbm.xml"/>
+    <mapping resource="sailpoint/object/PostCommitNotificationObject.hbm.xml"/>
+    <mapping resource="sailpoint/object/ProcessLog.hbm.xml"/>
+    <mapping resource="sailpoint/object/Profile.hbm.xml"/>
+    <mapping resource="sailpoint/object/ProvisioningRequest.hbm.xml"/>
+    <mapping resource="sailpoint/object/ProvisioningTransaction.hbm.xml"/>
+    <mapping resource="sailpoint/object/QuickLink.hbm.xml"/>
+    <mapping resource="sailpoint/object/QuickLinkOptions.hbm.xml"/>
+    <mapping resource="sailpoint/object/RecommenderDefinition.hbm.xml"/>
+    <mapping resource="sailpoint/object/RemediationItem.hbm.xml"/>
+    <mapping resource="sailpoint/object/RemoteLoginToken.hbm.xml"/>
+    <mapping resource="sailpoint/object/Request.hbm.xml"/>
+    <mapping resource="sailpoint/object/RequestDefinition.hbm.xml"/>
+    <mapping resource="sailpoint/object/RequestState.hbm.xml"/>
+    <mapping resource="sailpoint/object/ResourceEvent.hbm.xml"/>
+    <mapping resource="sailpoint/object/RightConfig.hbm.xml"/>
+    <mapping resource="sailpoint/object/RoleChangeEvent.hbm.xml"/>
+    <mapping resource="sailpoint/object/RoleIndex.hbm.xml"/>
+    <mapping resource="sailpoint/object/RoleMetadata.hbm.xml"/>
+    <mapping resource="sailpoint/object/RoleMiningResult.hbm.xml"/>
+    <mapping resource="sailpoint/object/RoleScorecard.hbm.xml"/>
+    <mapping resource="sailpoint/object/Rule.hbm.xml"/>
+    <mapping resource="sailpoint/object/RuleRegistry.hbm.xml"/>
+    <mapping resource="sailpoint/object/SAMLToken.hbm.xml"/>
+    <mapping resource="sailpoint/object/Scope.hbm.xml"/>
+    <mapping resource="sailpoint/object/Scorecard.hbm.xml"/>
+    <mapping resource="sailpoint/object/ScoreConfig.hbm.xml"/>
+    <mapping resource="sailpoint/object/Schema.hbm.xml"/>
+    <mapping resource="sailpoint/object/SignOffHistory.hbm.xml"/>  
+    <mapping resource="sailpoint/object/SODConstraint.hbm.xml"/>
+    <mapping resource="sailpoint/object/ServiceDefinition.hbm.xml"/>
+    <mapping resource="sailpoint/object/ServiceLock.hbm.xml"/>
+    <mapping resource="sailpoint/object/ServiceStatus.hbm.xml"/>
+    <mapping resource="sailpoint/object/Server.hbm.xml"/>
+    <mapping resource="sailpoint/object/ServerStatistic.hbm.xml"/>
+    <mapping resource="sailpoint/object/SyslogEvent.hbm.xml"/>
+    <mapping resource="sailpoint/object/Tag.hbm.xml"/>
+    <mapping resource="sailpoint/object/TaskDefinition.hbm.xml"/>
+    <mapping resource="sailpoint/object/TaskEvent.hbm.xml"/>
+    <mapping resource="sailpoint/object/Target.hbm.xml"/>
+    <mapping resource="sailpoint/object/TargetSource.hbm.xml"/>
+    <mapping resource="sailpoint/object/TargetAssociation.hbm.xml"/>
+    <mapping resource="sailpoint/object/TaskResult.hbm.xml"/>
+    <mapping resource="sailpoint/object/TimePeriod.hbm.xml"/>
+    <mapping resource="sailpoint/object/UIConfig.hbm.xml"/>
+    <mapping resource="sailpoint/object/UIPreferences.hbm.xml"/>
+    <mapping resource="sailpoint/object/Widget.hbm.xml"/>
+    <mapping resource="sailpoint/object/Workflow.hbm.xml"/>
+    <mapping resource="sailpoint/object/WorkflowCase.hbm.xml"/>
+    <mapping resource="sailpoint/object/WorkflowRegistry.hbm.xml"/>
+    <mapping resource="sailpoint/object/WorkflowTarget.hbm.xml"/>
+    <mapping resource="sailpoint/object/WorkflowTestSuite.hbm.xml"/>
+    <mapping resource="sailpoint/object/WorkItem.hbm.xml"/>
+    <mapping resource="sailpoint/object/WorkItemArchive.hbm.xml"/>
+    <mapping resource="sailpoint/object/WorkItemConfig.hbm.xml"/>
+    <mapping resource="sailpoint/object/YAMLConfig.hbm.xml"/>
+
+    <!-- Begin of custom IIQ objects -->
+    <mapping resource="sailpoint/object/ProvisioningRecord.hbm.xml"/>
+    <!-- End of custom IIQ objects -->
+
+    <!-- cache settings -->
+    <!--
+      For now, we are going with minimal caching since this has lead to strange
+      hibernate problems in the past.  We will just cache applications (see bug
+      4304), but this will most likely be expanded in the future.
+     -->
+    <class-cache class="sailpoint.object.Application"
+                 usage="nonstrict-read-write"/>
+    <class-cache class="sailpoint.object.ActivityDataSource"
+                 usage="nonstrict-read-write"/>
+    <class-cache class="sailpoint.object.ApplicationScorecard"
+                 usage="nonstrict-read-write"/>
+    <class-cache class="sailpoint.object.Schema"
+                 usage="nonstrict-read-write"/>
+    <collection-cache collection="sailpoint.object.Application.schemas"
+                      usage="nonstrict-read-write"/>
+    <collection-cache collection="sailpoint.object.Application.activityDataSources"
+                      usage="nonstrict-read-write"/>
+    <collection-cache collection="sailpoint.object.Application.remediators"
+                      usage="nonstrict-read-write"/>
+    <collection-cache collection="sailpoint.object.Application.secondaryOwners"
+                      usage="nonstrict-read-write"/>
+    <collection-cache collection="sailpoint.object.Application.passwordPolicies"
+                      usage="nonstrict-read-write"/>
+    <collection-cache collection="sailpoint.object.Schema.attributes"
+                      usage="nonstrict-read-write"/>
+
+<!-- 
+    Commented these out for now.  See the comments above for more information.
+
+    <class-cache class="sailpoint.object.AbstractCertificationItem"
+                 usage="nonstrict-read-write"/>
+    <class-cache class="sailpoint.object.AccountGroup"
+                 usage="nonstrict-read-write"/>
+    <class-cache class="sailpoint.object.ArchivedCertificationEntity"
+                 usage="nonstrict-read-write"/>
+    <class-cache class="sailpoint.object.AuditConfig"
+                 usage="nonstrict-read-write"/>
+    <class-cache class="sailpoint.object.AuditEvent"
+                 usage="nonstrict-read-write"/>
+    <class-cache class="sailpoint.object.AuthenticationAnswer"
+                 usage="nonstrict-read-write"/>
+    <class-cache class="sailpoint.object.AuthenticationQuestion"
+                 usage="nonstrict-read-write"/>
+    <class-cache class="sailpoint.object.Bundle"
+                 usage="nonstrict-read-write"/>
+    <class-cache class="sailpoint.object.Category"
+                 usage="nonstrict-read-write"/>
+    <class-cache class="sailpoint.object.Capability"
+                 usage="nonstrict-read-write"/>
+    <class-cache class="sailpoint.object.Certification"
+                 usage="nonstrict-read-write"/>
+    <class-cache class="sailpoint.object.CertificationAction"
+                 usage="nonstrict-read-write"/>
+    <class-cache class="sailpoint.object.CertificationArchive"
+                 usage="nonstrict-read-write"/>
+    <class-cache class="sailpoint.object.CertificationChallenge"
+                 usage="nonstrict-read-write"/>
+    <class-cache class="sailpoint.object.CertificationDefinition"
+                 usage="nonstrict-read-write"/>
+    <class-cache class="sailpoint.object.CertificationDelegation"
+                 usage="nonstrict-read-write"/>
+    <class-cache class="sailpoint.object.SPRight"
+                 usage="nonstrict-read-write"/>
+    <class-cache class="sailpoint.object.Configuration"
+                 usage="nonstrict-read-write"/>
+-->
+    <!-- No cache for sailpoint.object.Custom since these can be huge. -->
+<!--
+    <class-cache class="sailpoint.object.EmailTemplate"
+                 usage="nonstrict-read-write"/>
+    <class-cache class="sailpoint.object.EntitlementGroup"
+                 usage="nonstrict-read-write"/>
+    <class-cache class="sailpoint.object.EntitlementSnapshot"
+                 usage="nonstrict-read-write"/>
+    <class-cache class="sailpoint.object.Form"
+                 usage="nonstrict-read-write"/>
+    <class-cache class="sailpoint.object.GroupFactory"
+                 usage="nonstrict-read-write"/>
+    <class-cache class="sailpoint.object.GroupDefinition"
+                 usage="nonstrict-read-write"/>
+    <class-cache class="sailpoint.object.GroupIndex"
+                 usage="nonstrict-read-write"/>
+    <class-cache class="sailpoint.object.Identity"
+                 usage="nonstrict-read-write"/>
+    <class-cache class="sailpoint.object.IdentityArchive"
+                 usage="nonstrict-read-write"/>
+    <class-cache class="sailpoint.object.IdentitySnapshot"
+                 usage="nonstrict-read-write"/>
+    <class-cache class="sailpoint.object.IdentityTrigger"
+                 usage="nonstrict-read-write"/>
+    <class-cache class="sailpoint.object.IntegrationConfig"
+                 usage="nonstrict-read-write"/>
+    <class-cache class="sailpoint.object.JasperPageBucket"
+                 usage="nonstrict-read-write"/>
+    <class-cache class="sailpoint.object.JasperResult"
+                 usage="nonstrict-read-write"/>
+    <class-cache class="sailpoint.object.JasperTemplate"
+                 usage="nonstrict-read-write"/>
+    <class-cache class="sailpoint.object.Link"
+                 usage="nonstrict-read-write"/>
+    <class-cache class="sailpoint.object.ManagedAttribute"
+                 usage="nonstrict-read-write"/>
+    <class-cache class="sailpoint.object.MiningConfig"
+                 usage="nonstrict-read-write"/>
+    <class-cache class="sailpoint.object.MitigationExpiration"
+                 usage="nonstrict-read-write"/>
+    <class-cache class="sailpoint.object.MessageTemplate"
+                 usage="nonstrict-read-write"/>
+    <class-cache class="sailpoint.object.Profile"
+                 usage="nonstrict-read-write"/>
+-->
+    <!-- No cache for sailpoint.object.ProvisioningBaseline since these can be huge. -->
+<!-- 
+    <class-cache class="sailpoint.object.RemediationItem"
+                 usage="nonstrict-read-write"/>
+    <class-cache class="sailpoint.object.Request"
+                 usage="nonstrict-read-write"/>
+    <class-cache class="sailpoint.object.RequestDefinition"
+                 usage="nonstrict-read-write"/>
+    <class-cache class="sailpoint.object.RightConfig"
+                 usage="nonstrict-read-write"/>
+    <class-cache class="sailpoint.object.RoleMiningResult"
+                 usage="nonstrict-read-write"/>
+    <class-cache class="sailpoint.object.Rule"
+                 usage="nonstrict-read-write"/>
+    <class-cache class="sailpoint.object.RuleRegistry"
+                 usage="nonstrict-read-write"/>
+    <class-cache class="sailpoint.object.Scope"
+                 usage="nonstrict-read-write"/>
+    <class-cache class="sailpoint.object.ScoreConfig"
+                 usage="nonstrict-read-write"/>
+    <class-cache class="sailpoint.object.Scorecard"
+                 usage="nonstrict-read-write"/>
+    <class-cache class="sailpoint.object.Tag"
+                 usage="nonstrict-read-write"/>
+    <class-cache class="sailpoint.object.TaskDefinition"
+                 usage="nonstrict-read-write"/>
+    <class-cache class="sailpoint.object.TaskResult"
+                 usage="nonstrict-read-write"/>
+    <class-cache class="sailpoint.object.TimePeriod"
+                 usage="nonstrict-read-write"/>
+    <class-cache class="sailpoint.object.UIConfig"
+                 usage="nonstrict-read-write"/>
+    <class-cache class="sailpoint.object.UIPreferences"
+                 usage="nonstrict-read-write"/>
+    <class-cache class="sailpoint.object.Workflow"
+                 usage="nonstrict-read-write"/>
+    <class-cache class="sailpoint.object.WorkflowCase"
+                 usage="nonstrict-read-write"/>
+    <class-cache class="sailpoint.object.WorkItem"
+                 usage="nonstrict-read-write"/>
+    <class-cache class="sailpoint.object.WorkItemConfig"
+                 usage="nonstrict-read-write"/>
+
+    <collection-cache collection="sailpoint.object.Bundle.inheritance"
+                      usage="nonstrict-read-write"/>
+    <collection-cache collection="sailpoint.object.Bundle.permits"
+                      usage="nonstrict-read-write"/>
+    <collection-cache collection="sailpoint.object.Bundle.requirements"
+                      usage="nonstrict-read-write"/>
+    <collection-cache collection="sailpoint.object.Bundle.profiles"
+                      usage="nonstrict-read-write"/>
+    <collection-cache collection="sailpoint.object.Capability.rights"
+                      usage="nonstrict-read-write"/>
+    <collection-cache collection="sailpoint.object.Capability.inheritedCapabilities"
+                      usage="nonstrict-read-write"/>
+    <collection-cache collection="sailpoint.object.Certification.archivedEntities"
+                      usage="nonstrict-read-write"/>
+    <collection-cache collection="sailpoint.object.Certification.entities"
+                      usage="nonstrict-read-write"/>
+    <collection-cache collection="sailpoint.object.Certification.hibernateCertifications"
+                      usage="nonstrict-read-write"/>
+    <collection-cache collection="sailpoint.object.Certification.tags"
+                      usage="nonstrict-read-write"/>
+    <collection-cache collection="sailpoint.object.CertificationDefinition.tags"
+                      usage="nonstrict-read-write"/>
+    <collection-cache collection="sailpoint.object.CertificationEntity.items"
+                      usage="nonstrict-read-write"/>
+-->
+      <!-- note that since this is a union-subclass it shares the class cache
+           with CertificationIdentity -->
+<!--
+    <collection-cache collection="sailpoint.object.CertificationItem.bundleEntitlements"
+                      usage="nonstrict-read-write"/>
+    <collection-cache collection="sailpoint.object.EmailTemplate.sessionProperties"
+                      usage="nonstrict-read-write"/>
+    <collection-cache collection="sailpoint.object.EntitlementGroup.permissions"
+                      usage="nonstrict-read-write"/>
+    <collection-cache collection="sailpoint.object.EntitlementSnapshot.permissions"
+                      usage="nonstrict-read-write"/>
+    <collection-cache collection="sailpoint.object.Identity.bundles"
+                      usage="nonstrict-read-write"/>
+    <collection-cache collection="sailpoint.object.Identity.capabilities"
+                      usage="nonstrict-read-write"/>
+    <collection-cache collection="sailpoint.object.Identity.authenticationAnswers"
+                      usage="nonstrict-read-write"/>
+    <collection-cache collection="sailpoint.object.Identity.controlledScopes"
+                      usage="nonstrict-read-write"/>
+    <collection-cache collection="sailpoint.object.Identity.exceptions"
+                      usage="nonstrict-read-write"/>
+    <collection-cache collection="sailpoint.object.Identity.mitigationExpirations"
+                      usage="nonstrict-read-write"/>
+    <collection-cache collection="sailpoint.object.IntegrationConfig.synchronizedRoles"
+                      usage="nonstrict-read-write"/>
+    <collection-cache collection="sailpoint.object.Profile.constraints"
+                      usage="nonstrict-read-write"/>
+    <collection-cache collection="sailpoint.object.Profile.permissions"
+                      usage="nonstrict-read-write"/>
+    <collection-cache collection="sailpoint.object.RequestDefinition.rights"
+                      usage="nonstrict-read-write"/>
+    <collection-cache collection="sailpoint.object.RequestDefinition.signature.arguments"
+                      usage="nonstrict-read-write"/>
+    <collection-cache collection="sailpoint.object.RequestDefinition.signature.returns"
+                      usage="nonstrict-read-write"/>
+    <collection-cache collection="sailpoint.object.Rule.referencedRules"
+                      usage="nonstrict-read-write"/>
+    <collection-cache collection="sailpoint.object.Rule.signature.arguments"
+                      usage="nonstrict-read-write"/>
+    <collection-cache collection="sailpoint.object.Rule.signature.returns"
+                      usage="nonstrict-read-write"/>
+    <collection-cache collection="sailpoint.object.RuleRegistry.registry"
+                      usage="nonstrict-read-write"/>
+    <collection-cache collection="sailpoint.object.Scope.childScopes"
+                      usage="nonstrict-read-write"/>
+    <collection-cache collection="sailpoint.object.Schema.attributes"
+                      usage="nonstrict-read-write"/>
+    <collection-cache collection="sailpoint.object.TaskDefinition.rights"
+                      usage="nonstrict-read-write"/>
+    <collection-cache collection="sailpoint.object.TaskDefinition.signature.arguments"
+                      usage="nonstrict-read-write"/>
+    <collection-cache collection="sailpoint.object.TaskDefinition.signature.returns"
+                      usage="nonstrict-read-write"/>
+    <collection-cache collection="sailpoint.object.WorkItem.comments"
+                      usage="nonstrict-read-write"/>
+    <collection-cache collection="sailpoint.object.WorkItem.remediationItems"
+                      usage="nonstrict-read-write"/>
+    <collection-cache collection="sailpoint.object.WorkItemConfig.owners"
+                      usage="nonstrict-read-write"/>
+-->
+
+  </session-factory>
+</hibernate-configuration>
