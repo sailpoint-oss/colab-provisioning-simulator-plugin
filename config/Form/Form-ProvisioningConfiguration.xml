@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Form PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Form name="Provisioning Simulator Configuration" type="Workflow">
+  <Attributes>
+    <Map>
+      <entry key="pageTitle" value="Provisioning Simulator Configuration"/>
+      <entry key="title" value="Provisioning Simulator Configuration"/>
+    </Map>
+  </Attributes>
+  <Description></Description>
+  <Section columns="3" name="Global Configuration">
+    <Field columnSpan="1" displayName="Disable Provisioning" name="disableProvisioning" type="boolean">
+      <RuleRef>
+        <Reference class="sailpoint.object.Rule" id="7f0000018f7b1783818f7dbf97fc0453" name="Rule-FieldValue-ReturnBooleanConfigValue"/>
+      </RuleRef>
+    </Field>
+    <Field columnSpan="1" displayName="Save Unfiltered Records" name="saveUnfilteredRecords" type="boolean">
+      <RuleRef>
+        <Reference class="sailpoint.object.Rule" id="7f0000018f7b1783818f7dbf97fc0453" name="Rule-FieldValue-ReturnBooleanConfigValue"/>
+      </RuleRef>
+    </Field>
+    <Field columnSpan="1" displayName="Enable Whitelisting" name="enableWhitelisting" type="boolean">
+      <RuleRef>
+        <Reference class="sailpoint.object.Rule" id="7f0000018f7b1783818f7dbf97fc0453" name="Rule-FieldValue-ReturnBooleanConfigValue"/>
+      </RuleRef>
+    </Field>
+    <Field columnSpan="1" displayName="Store Additional Identity Attribute" name="storeAdditionalIdAttribute" type="boolean">
+      <RuleRef>
+        <Reference class="sailpoint.object.Rule" id="7f0000018f7b1783818f7dbf97fc0453" name="Rule-FieldValue-ReturnBooleanConfigValue"/>
+      </RuleRef>
+    </Field>
+    <Field columnSpan="2" displayName="Additional Identity Attribute Name" name="additionalIdAttributeName" type="string">
+      <Script>
+        <Source>import pro.jakubiak.provisioning.simulator.ConfigHelper;
+          ConfigHelper ch = new ConfigHelper(context);
+          return ch.getAdditionalIdAttributeNames();</Source>
+      </Script>
+    </Field>
+  </Section>
+  <Section name="Application Selection">
+    <Field displayName="Application" name="application" type="Application"/>
+  </Section>
+  <Section columns="2" name="Application Configuration">
+    <Field columnSpan="1" displayName="Create Operation Filter" multi="true" name="createFilter" type="string">
+      <Script>
+        <Source>import pro.jakubiak.provisioning.simulator.ConfigHelper;
+          Application app = context.getObject(Application.class,application);
+          ConfigHelper ch = new ConfigHelper(context);
+          return ch.getCreateFilterConfig(app.getName());</Source>
+      </Script>
+    </Field>
+    <Field columnSpan="1" multi="true" name="Modify Operation Filter" type="string">
+      <Script>
+        <Source>import pro.jakubiak.provisioning.simulator.ConfigHelper;
+          Application app = context.getObject(Application.class,application);
+          ConfigHelper ch = new ConfigHelper(context);
+          return ch.getModifyFilterConfig(app.getName());</Source>
+      </Script>
+    </Field>
+  </Section>
+  <Button action="next" label="Save"/>
+  <Button action="cancel" label="Cancel"/>
+</Form>

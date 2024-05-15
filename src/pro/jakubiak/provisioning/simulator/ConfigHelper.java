@@ -93,7 +93,9 @@ public class ConfigHelper {
     public Boolean getSaveUnfilteredRecords() {
         return saveUnfilteredRecords;
     }
-
+    public Boolean getBooleanConfigAttribute(String attributeName) {
+        return (Boolean) intConfig.get(attributeName);
+    }
     /**
      * Sets save unfiltered records.
      *
@@ -144,9 +146,6 @@ public class ConfigHelper {
      *
      * @return the additional id attribute names
      */
-    public String getAdditionalIdAttributeNames() {
-        return additionalIdAttributeNames;
-    }
 
     /**
      * Sets additional id attribute names.
@@ -193,9 +192,10 @@ public class ConfigHelper {
      * @param appName the app name
      * @return the create filter config
      */
-    public Map<String, Object> getCreateFilterConfig(String appName) {
-        return (Map<String, Object>) getFilterConfig(appName).get(ProvisioningPlan.AccountRequest.Operation.Create.toString());
+    public List<String> getCreateFilterConfig(String appName) {
+        return (List<String>) getFilterConfig(appName).get(ProvisioningPlan.AccountRequest.Operation.Create.toString());
     }
+
 
     /**
      * Gets modify filter config.
@@ -203,8 +203,8 @@ public class ConfigHelper {
      * @param appName the app name
      * @return the modify filter config
      */
-    public Map<String, Object> getModifyFilterConfig(String appName) {
-        return (Map<String, Object>) getFilterConfig(appName).get(ProvisioningPlan.AccountRequest.Operation.Modify.toString());
+    public List<String> getModifyFilterConfig(String appName) {
+        return (List<String>) getFilterConfig(appName).get(ProvisioningPlan.AccountRequest.Operation.Modify.toString());
     }
 
     /**
@@ -214,8 +214,8 @@ public class ConfigHelper {
      * @param operation the operation
      * @return the operation filter config
      */
-    public Map<String, Object> getOperationFilterConfig(String appName, ProvisioningPlan.AccountRequest.Operation operation) {
-        return (Map<String, Object>) getFilterConfig(appName).get(operation.toString());
+    public List<String> getOperationFilterConfig(String appName, ProvisioningPlan.AccountRequest.Operation operation) {
+        return (List<String>) getFilterConfig(appName).get(operation.toString());
     }
 
     /**
@@ -269,7 +269,9 @@ public class ConfigHelper {
     public Boolean isInterceptedApplication(String appName) {
         return interceptedApplications.containsKey(appName);
     }
-
+public String getAdditionalIdAttributeNames() {
+        return additionalIdAttributeNames;
+    }
     /**
      * Gets intercepted applications.
      *

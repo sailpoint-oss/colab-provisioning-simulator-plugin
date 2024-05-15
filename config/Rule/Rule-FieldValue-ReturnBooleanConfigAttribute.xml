@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Rule PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Rule language="beanshell" name="Rule-FieldValue-ReturnBooleanConfigValue" type="FieldValue">
+  <Source>
+    <![CDATA[
+    import pro.jakubiak.provisioning.simulator.ConfigHelper;
+
+    ConfigHelper ch = new ConfigHelper(context);
+    return ch.getBooleanConfigAttribute(field.getName());
+    ]]>
+  </Source>
+</Rule>
