@@ -95,6 +95,7 @@ public class ProvisioningExecutor extends AbstractIntegrationExecutor {
         whitelistingEnabled = Util.otob(integrationConfig.get(WHITELISTING_ENABLED));
         trace = Util.otob(integrationConfig.get(TRACE_ENABLED));
         debug = Util.otob(integrationConfig.get(DEBUG_ENABLED));
+
         storeAdditionalId = Util.otob(integrationConfig.get(STORE_ADDITIONAL_ID));
         if (storeAdditionalId) {
             additionalIdAttributeName = (String) integrationConfig.get("additionalIdAttributeName");
@@ -114,6 +115,7 @@ public class ProvisioningExecutor extends AbstractIntegrationExecutor {
     private ProvisioningPlan processWhitelistingProvisioningPlan(ProvisioningPlan oldPlan, SailPointContext context) throws GeneralException {
         logDebug("Started whitelisting processing");
         ProvisioningPlan plan = new ProvisioningPlan(oldPlan);
+        
         List<AttributeRequest> newAttributeRequests = new ArrayList<>();
         List<AccountRequest> newAccountRequests = new ArrayList<>();
         List<AccountRequest> accountRequests = plan.getAccountRequests();
