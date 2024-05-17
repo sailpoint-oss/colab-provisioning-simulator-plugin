@@ -32,32 +32,39 @@
     <Field columnSpan="2" displayName="Additional Identity Attribute Name" name="additionalIdAttributeName" type="string">
       <Script>
         <Source>import pro.jakubiak.provisioning.simulator.ConfigHelper;
-          ConfigHelper ch = new ConfigHelper(context);
-          return ch.getAdditionalIdAttributeNames();</Source>
+          ConfigHelper.initContext(context);
+          return ConfigHelper.getAdditionalIdAttributeNames();</Source>
       </Script>
     </Field>
   </Section>
   <Section name="Application Selection">
-    <Field displayName="Application" name="application" type="Application"/>
+    <Field displayName="Application" name="application" postBack="true" type="Application"/>
   </Section>
   <Section columns="2" name="Application Configuration">
-    <Field columnSpan="1" displayName="Create Operation Filter" multi="true" name="createFilter" type="string">
+    <Field columnSpan="1" dependencies="application" displayName="Create Operation Filter" dynamic="true" multi="true" name="createFilter" type="string">
       <Script>
         <Source>import pro.jakubiak.provisioning.simulator.ConfigHelper;
+          import sailpoint.object.Application;
           Application app = context.getObject(Application.class,application);
-          ConfigHelper ch = new ConfigHelper(context);
-          return ch.getCreateFilterConfig(app.getName());</Source>
+          ConfigHelper.initContext(context);
+          if(app != null) {
+
+          return ConfigHelper.getCreateFilterConfig(app.getName());
+          }</Source>
       </Script>
     </Field>
-    <Field columnSpan="1" multi="true" name="Modify Operation Filter" type="string">
+    <Field columnSpan="1" dependencies="application" dynamic="true" multi="true" name="Modify Operation Filter" type="string">
       <Script>
         <Source>import pro.jakubiak.provisioning.simulator.ConfigHelper;
+          import sailpoint.object.Application;
           Application app = context.getObject(Application.class,application);
-          ConfigHelper ch = new ConfigHelper(context);
-          return ch.getModifyFilterConfig(app.getName());</Source>
+          ConfigHelper.initContext(context);
+          if(app != null) {
+          //return ConfigHelper.getModifyFilterConfig(app.getName());
+          }</Source>
       </Script>
     </Field>
   </Section>
-  <Button action="next" label="Save"/>
+  <Button action="next" label="Close"/>
   <Button action="cancel" label="Cancel"/>
 </Form>

@@ -3,10 +3,10 @@
 <Rule language="beanshell" name="Rule-FieldValue-ReturnBooleanConfigValue" type="FieldValue">
   <Source>
     <![CDATA[
-    import pro.jakubiak.provisioning.simulator.ConfigHelper;
+  import pro.jakubiak.provisioning.simulator.ConfigHelper;
 
-    ConfigHelper ch = new ConfigHelper(context);
-    return ch.getBooleanConfigAttribute(field.getName());
+  ConfigHelper.initContext(context);
+  return ConfigHelper.getBooleanConfigAttribute(field.getName());
     ]]>
   </Source>
 </Rule>
