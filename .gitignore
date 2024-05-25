@@ -4,4 +4,9 @@
 /lib/identityiq.jar
 /.idea/
 /colab-provisioning-simulator-plugin.iml
+/out/*
+
+
+/out/production/colab-provisioning-simulator-plugin/pro/jakubiak/provisioning/simulator/*
+
 /out/
