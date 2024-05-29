@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE Workflow PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Workflow explicitTransitions="true" name="ProvisioningSimulator-Configure">
+  <Variable initializer="true" name="trace"/>
+  <Step icon="Start" name="Start" posX="28" posY="10">
+    <Transition to="Show Config"/>
+  </Step>
+  <Step icon="Stop" name="Stop" posX="334" posY="10"/>
+  <Step icon="Provision" name="Save Config" posX="216" posY="10">
+    <Transition to="Stop"/>
+  </Step>
+  <Step icon="Approval" name="Show Config" posX="98" posY="10">
+    <Approval name="Provisioning Simulator Configuration" owner="ref:launcher" return="disableProvisioning,saveUnfilteredRecords,enableWhitelisting,storeAdditionalIdAttribute,additionalIdAttributeName,application,createFilter,modifyFilter" send="">
+      <Form name="Provisioning Simulator Configuration">
+        <Attributes>
+          <Map>
+            <entry key="pageTitle" value="Provisioning Simulator Configuration"/>
+            <entry key="title" value="Provisioning Simulator Configuration"/>
+          </Map>
+        </Attributes>
+        <FormRef name="Provisioning Simulator Configuration"/>
+      </Form>
+    </Approval>
+    <Transition to="Save Config"/>
+  </Step>
+</Workflow>

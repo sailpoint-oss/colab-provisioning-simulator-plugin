@@ -83,9 +83,12 @@ public class ConfigHelper {
             additionalIdAttributeNames = Util.otos(intConfig.get("additionalIdAttributeNames"));
             logger.debug("additional id attribute names: " + additionalIdAttributeNames);
         }
-
-        logger.debug("AppConfig is: "+appConfig.toString());
-        logger.debug("IntConfig is: "+intConfig.toString());
+        if(appConfig!=null) {
+            logger.debug("AppConfig is: " + appConfig.toString());
+        }
+        if(intConfig!=null) {
+            logger.debug("IntConfig is: " + intConfig.toString());
+        }
     }
 
     /**
@@ -100,10 +103,10 @@ public class ConfigHelper {
     /**
      * Sets disable provisioning.
      *
-     * @param disableProvisioning to disable provisioning
+     * @param disableProvisioningInput to disable provisioning
      */
-    public static void setDisableProvisioning(Boolean disableProvisioning) {
-        disableProvisioning = disableProvisioning;
+    public static void setDisableProvisioning(Boolean disableProvisioningInput) {
+        disableProvisioning = disableProvisioningInput;
     }
 
     /**
@@ -120,10 +123,10 @@ public class ConfigHelper {
     /**
      * Sets save unfiltered records.
      *
-     * @param saveUnfilteredRecords the save unfiltered records
+     * @param saveUnfilteredRecordsInput the save unfiltered records
      */
-    public static void setSaveUnfilteredRecords(Boolean saveUnfilteredRecords) {
-        saveUnfilteredRecords = saveUnfilteredRecords;
+    public static void setSaveUnfilteredRecords(Boolean saveUnfilteredRecordsInput) {
+        saveUnfilteredRecords = saveUnfilteredRecordsInput;
     }
 
     /**
@@ -138,10 +141,10 @@ public class ConfigHelper {
     /**
      * Sets enable whitelist.
      *
-     * @param enableWhitelist the enable whitelist
+     * @param enableWhitelistInput the enable whitelist
      */
-    public static void setEnableWhitelist(Boolean enableWhitelist) {
-        enableWhitelist = enableWhitelist;
+    public static void setEnableWhitelist(Boolean enableWhitelistInput) {
+        enableWhitelist = enableWhitelistInput;
     }
 
     /**
@@ -156,10 +159,10 @@ public class ConfigHelper {
     /**
      * Sets store additional id.
      *
-     * @param storeAdditionalId the store additional id
+     * @param storeAdditionalIdInput the store additional id
      */
-    public static void setStoreAdditionalId(Boolean storeAdditionalId) {
-        storeAdditionalId = storeAdditionalId;
+    public static void setStoreAdditionalId(Boolean storeAdditionalIdInput) {
+        storeAdditionalId = storeAdditionalIdInput;
     }
 
     /**
@@ -171,10 +174,10 @@ public class ConfigHelper {
     /**
      * Sets additional id attribute names.
      *
-     * @param additionalIdAttributeNames the additional id attribute names
+     * @param additionalIdAttributeNamesInput the additional id attribute names
      */
-    public static void setAdditionalIdAttributeNames(String additionalIdAttributeNames) {
-        additionalIdAttributeNames = additionalIdAttributeNames;
+    public static void setAdditionalIdAttributeNames(String additionalIdAttributeNamesInput) {
+        additionalIdAttributeNames = additionalIdAttributeNamesInput;
     }
 
     /**
@@ -305,10 +308,10 @@ public static String getAdditionalIdAttributeNames() {
     /**
      * Sets intercepted applications.
      *
-     * @param interceptedApplications the intercepted applications
+     * @param interceptedApplicationsInput the intercepted applications
      */
-    public static void setInterceptedApplications(Map<String, ManagedResource> interceptedApplications) {
-        interceptedApplications = interceptedApplications;
+    public static void setInterceptedApplications(Map<String, ManagedResource> interceptedApplicationsInput) {
+        interceptedApplications = interceptedApplicationsInput;
     }
 
     /**

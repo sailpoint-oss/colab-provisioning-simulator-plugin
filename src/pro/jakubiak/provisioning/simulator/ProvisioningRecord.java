@@ -6,7 +6,7 @@ import sailpoint.object.Link;
 import sailpoint.object.ProvisioningPlan;
 import sailpoint.object.SailPointObject;
 import sailpoint.tools.GeneralException;
-
+import sailpoint.object.AuditEvent;
 import java.util.List;
 
 /**
@@ -60,9 +60,15 @@ public class ProvisioningRecord extends SailPointObject {
         }
 
         this.newValue = attributeRequest.getValue();
-    }
+        AuditEvent auditEvent = new AuditEvent();
+        auditEvent.setAction("update");
+        auditEvent.setTarget(identity.getName());
+        auditEvent.setAttributeName(attributeName);
+        auditEvent.setAttribute("oldValue", oldValue);
+        auditEvent.setAttribute("newValue", newValue);
 
-    /**
+    }
+        /**
      * Instantiates a new Provisioning record.
      *
      * @param accountRequest   the account request
