@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE QuickLink PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<QuickLink action="workflow" category="ProvisioningSimulator" messageKey="Configure Simulator" name="Configure Simulator" ordering="99">
+  <Attributes>
+    <Map>
+      <entry key="workflowName" value="ProvisioningSimulator-Configure"/>
+    </Map>
+  </Attributes>
+  <QuickLinkOptions allowSelf="true">
+    <DynamicScopeRef>
+      <Reference class="sailpoint.object.DynamicScope" name="ProvisioningSimulatorConfigurators"/>
+    </DynamicScopeRef>
+  </QuickLinkOptions>
+</QuickLink>

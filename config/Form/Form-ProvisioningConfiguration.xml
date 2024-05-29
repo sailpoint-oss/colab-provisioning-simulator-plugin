@@ -53,7 +53,7 @@
           }</Source>
       </Script>
     </Field>
-    <Field columnSpan="1" dependencies="application" dynamic="true" multi="true" name="Modify Operation Filter" type="string">
+    <Field columnSpan="1" dependencies="application" dynamic="true" multi="true" displayName="Modify Operation Filter" name="modifyFilter" type="string">
       <Script>
         <Source>import pro.jakubiak.provisioning.simulator.ConfigHelper;
           import sailpoint.object.Application;
@@ -66,5 +66,5 @@
     </Field>
   </Section>
   <Button action="next" label="Close"/>
-  <Button action="cancel" label="Cancel"/>
+  <Button action="back" label="Cancel"/>
 </Form>
