@@ -3,13 +3,14 @@ package pro.jakubiak.provisioning.simulator;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import sailpoint.api.SailPointContext;
-import sailpoint.object.IntegrationConfig;
-import sailpoint.object.ManagedResource;
-import sailpoint.object.ProvisioningPlan;
+import sailpoint.object.*;
 import sailpoint.server.InternalContext;
 import sailpoint.tools.GeneralException;
 import sailpoint.tools.Util;
+import sailpoint.workflow.WorkflowContext;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,6 +26,15 @@ public class ConfigHelper {
     private static final String APP_CONFIG_NAME = "appConfig";
     private static final String INT_CONFIG_NAME = "integrationConfig";
     private static final String FILTER_CONFIG_NAME = "filterConfig";
+    public static final String DISABLE_PROVISIONING = "disableProvisioning";
+    public static final String SAVE_UNFILTERED_RECORDS = "saveUnfilteredRecords";
+    public static final String ENABLE_WHITELIST = "enableWhitelist";
+    public static final String STORE_ADDITIONAL_ID = "storeAdditionalId";
+    public static final String ADDITIONAL_ID_ATTRIBUTE_NAMES = "additionalIdAttributeNames";
+    public static final String CREATE_FILTER = "createFilter";
+    public static final String MODIFY_FILTER = "modifyFilter";
+    public static final String REMOVE_APP_CONFIG = "removeAppConfig";
+    public static final String ERROR_WHILE_SAVING_APPLICATION_CONFIGURATION = "Error while saving application configuration";
     private static SailPointContext context;
     private static IntegrationConfig iiqConfig;
     private static Map<String, Object> appConfig;
@@ -72,15 +82,15 @@ public class ConfigHelper {
         logger.debug("Reading global config");
         if (intConfig != null) {
 
-            disableProvisioning = Util.otob(intConfig.get("disableProvisioning"));
+            disableProvisioning = Util.otob(intConfig.get(DISABLE_PROVISIONING));
             logger.debug("disabling provisioning: " + disableProvisioning);
-            saveUnfilteredRecords = Util.otob(intConfig.get("saveUnfilteredRecords"));
+            saveUnfilteredRecords = Util.otob(intConfig.get(SAVE_UNFILTERED_RECORDS));
             logger.debug("save unfiltered records: " + saveUnfilteredRecords);
-            enableWhitelist = Util.otob(intConfig.get("enableWhitelist"));
+            enableWhitelist = Util.otob(intConfig.get(ENABLE_WHITELIST));
             logger.debug("enable whitelist: " + enableWhitelist);
-            storeAdditionalId = Util.otob(intConfig.get("storeAdditionalId"));
+            storeAdditionalId = Util.otob(intConfig.get(STORE_ADDITIONAL_ID));
             logger.debug("store additional id: " + storeAdditionalId);
-            additionalIdAttributeNames = Util.otos(intConfig.get("additionalIdAttributeNames"));
+            additionalIdAttributeNames = Util.otos(intConfig.get(ADDITIONAL_ID_ATTRIBUTE_NAMES));
             logger.debug("additional id attribute names: " + additionalIdAttributeNames);
         }
         if(appConfig!=null) {
@@ -89,6 +99,17 @@ public class ConfigHelper {
         if(intConfig!=null) {
             logger.debug("IntConfig is: " + intConfig.toString());
         }
+        logger.debug("Reading intercepted applications");
+        try {
+            interceptedApplications = new HashMap<>();
+            List<ManagedResource> managedResources = iiqConfig.getResources();
+            for (ManagedResource managedResource : managedResources) {
+                interceptedApplications.put(managedResource.getApplication().getName(), managedResource);
+            }
+            } catch (Exception e) {
+            logger.fatal("Error while reading intercepted applications");
+        }
+
     }
 
     /**
@@ -107,6 +128,83 @@ public class ConfigHelper {
      */
     public static void setDisableProvisioning(Boolean disableProvisioningInput) {
         disableProvisioning = disableProvisioningInput;
+    }
+
+    public static void saveSimulatorConfig(WorkflowContext wfc) throws GeneralException {
+        SailPointContext context = wfc.getSailPointContext();
+        initContext(context);
+        Attributes<String,Object> args = wfc.getArguments();
+        Application application = ConfigHelper.context.getObject(Application.class,(String) args.get("application"));
+        String appName = application.getName();
+        logger.debug("Saving simulator configuration");
+        logger.debug("Simulator configuration: " + args);
+
+        logger.debug("Saving integration configuration");
+        Map<String,Object> newIntegrationConfig = new HashMap<>();
+        newIntegrationConfig.put(DISABLE_PROVISIONING, args.get(DISABLE_PROVISIONING));
+        newIntegrationConfig.put(SAVE_UNFILTERED_RECORDS, args.get(SAVE_UNFILTERED_RECORDS));
+        newIntegrationConfig.put(ENABLE_WHITELIST, args.get(ENABLE_WHITELIST));
+        newIntegrationConfig.put(STORE_ADDITIONAL_ID, args.get(STORE_ADDITIONAL_ID));
+        newIntegrationConfig.put(ADDITIONAL_ID_ATTRIBUTE_NAMES, args.get(ADDITIONAL_ID_ATTRIBUTE_NAMES));
+
+        try {
+            iiqConfig.getAttributes().put(INT_CONFIG_NAME, newIntegrationConfig);
+            context.saveObject(iiqConfig);
+            context.commitTransaction();
+        } catch (GeneralException e) {
+            logger.error("Error while saving integration configuration");
+        }
+        logger.debug("Integration configuration saved");
+        logger.debug("Saving application configuration for application" + appName);
+        Map<String,Object> newAppConfig = new HashMap<>();
+        Map<String,Object> newFilterConfig = new HashMap<>();
+        newFilterConfig.put(ProvisioningPlan.AccountRequest.Operation.Create.toString(), args.get(CREATE_FILTER));
+        newFilterConfig.put(ProvisioningPlan.AccountRequest.Operation.Modify.toString(), args.get(MODIFY_FILTER));
+
+        newAppConfig.put(FILTER_CONFIG_NAME, newFilterConfig);
+        appConfig.put(appName, newAppConfig);
+        iiqConfig.getAttributes().put(APP_CONFIG_NAME, appConfig);
+
+        try {
+            context.saveObject(iiqConfig);
+            context.commitTransaction();
+        } catch (GeneralException e) {
+            logger.error(ERROR_WHILE_SAVING_APPLICATION_CONFIGURATION);
+        }
+        logger.debug("Checking if application is on the list of Managed Resources");
+        if (interceptedApplications == null || !interceptedApplications.containsKey(appName)) {
+            logger.debug("Application is not on the list of Managed Resources");
+            logger.debug("Adding application to the list of Managed Resources");
+            ManagedResource managedResource = new ManagedResource();
+            managedResource.setApplication(application);
+            iiqConfig.add(managedResource);
+            logger.debug("Saving ManagedResources configuration");
+            try {
+                context.saveObject(iiqConfig);
+                context.commitTransaction();
+            } catch (GeneralException e) {
+                logger.error(ERROR_WHILE_SAVING_APPLICATION_CONFIGURATION);
+            }
+        }
+        logger.debug("Application configuration saved - checking if application needs to be removed");
+        logger.debug("RemoveAppConfig: "+args.get(REMOVE_APP_CONFIG));
+        logger.debug("RemoveAppConfig: "+Util.otob(args.get(REMOVE_APP_CONFIG)));
+
+        if(Util.otob(args.get(REMOVE_APP_CONFIG)))
+        {
+            logger.debug("Removing application configuration for application" + appName);
+            appConfig.remove(appName);
+            iiqConfig.getAttributes().put(APP_CONFIG_NAME, appConfig);
+            iiqConfig.removeManagedResource(application);
+            try {
+                context.saveObject(iiqConfig);
+                context.commitTransaction();
+            } catch (GeneralException e) {
+                logger.error(ERROR_WHILE_SAVING_APPLICATION_CONFIGURATION);
+            }
+        }
+        logger.debug("Application configuration saved");
+        logger.debug("Simulator configuration: "+context.getObject(IntegrationConfig.class,CONFIG_NAME).toXml());
     }
 
     /**
@@ -197,6 +295,9 @@ public class ConfigHelper {
      * @return the app config
      */
     public static Map<String, Object> getAppConfig(String appName) {
+        if(Boolean.FALSE.equals(isAppConfigured(appName))) {
+            return new HashMap<>();
+        }
         return (Map<String, Object>) appConfig.get(appName);
     }
 
@@ -207,6 +308,9 @@ public class ConfigHelper {
      * @return the filter config
      */
     public static Map<String, Object> getFilterConfig(String appName) {
+        if(Boolean.FALSE.equals(isAppConfigured(appName))) {
+            return new HashMap<>();
+        }
         return (Map<String, Object>) getAppConfig(appName).get(FILTER_CONFIG_NAME);
     }
 
@@ -217,6 +321,12 @@ public class ConfigHelper {
      * @return the create filter config
      */
     public static List<String> getCreateFilterConfig(String appName) {
+        if (Boolean.FALSE.equals(isAppConfigured(appName))) {
+            return new ArrayList<>();
+        }
+        if (!getFilterConfig(appName).containsKey(ProvisioningPlan.AccountRequest.Operation.Create.toString())) {
+            return new ArrayList<>();
+        }
         return (List<String>) getFilterConfig(appName).get(ProvisioningPlan.AccountRequest.Operation.Create.toString());
     }
 
@@ -228,6 +338,12 @@ public class ConfigHelper {
      * @return the modify filter config
      */
     public static List<String> getModifyFilterConfig(String appName) {
+        if(Boolean.FALSE.equals(isAppConfigured(appName))) {
+            return new ArrayList<>();
+        }
+        if(!getFilterConfig(appName).containsKey(ProvisioningPlan.AccountRequest.Operation.Modify.toString())) {
+            return new ArrayList<>();
+        }
         return (List<String>) getFilterConfig(appName).get(ProvisioningPlan.AccountRequest.Operation.Modify.toString());
     }
 
@@ -378,7 +494,9 @@ public static String getAdditionalIdAttributeNames() {
      * @param filter  the filter
      */
     public static void setModifyFilter(String appName, List<String> filter) {
-        ((Map<String, Object>) getAppConfig(appName).get(FILTER_CONFIG_NAME)).put(ProvisioningPlan.AccountRequest.Operation.Modify.toString(), filter);
+        if(getAppConfig(appName) != null) {
+            ((Map<String, Object>) getAppConfig(appName).get(FILTER_CONFIG_NAME)).put(ProvisioningPlan.AccountRequest.Operation.Modify.toString(), filter);
+        }
     }
 
     /**
