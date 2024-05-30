@@ -7,29 +7,38 @@
       <entry key="title" value="Provisioning Simulator Configuration"/>
     </Map>
   </Attributes>
-  <Description></Description>
   <Section columns="3" name="Global Configuration">
     <Field columnSpan="1" displayName="Disable Provisioning" name="disableProvisioning" type="boolean">
       <RuleRef>
-        <Reference class="sailpoint.object.Rule" id="7f0000018f7b1783818f7dbf97fc0453" name="Rule-FieldValue-ReturnBooleanConfigValue"/>
+        <Reference class="sailpoint.object.Rule" name="Rule-FieldValue-ReturnBooleanConfigValue"/>
       </RuleRef>
     </Field>
     <Field columnSpan="1" displayName="Save Unfiltered Records" name="saveUnfilteredRecords" type="boolean">
       <RuleRef>
-        <Reference class="sailpoint.object.Rule" id="7f0000018f7b1783818f7dbf97fc0453" name="Rule-FieldValue-ReturnBooleanConfigValue"/>
+        <Reference class="sailpoint.object.Rule" name="Rule-FieldValue-ReturnBooleanConfigValue"/>
       </RuleRef>
     </Field>
     <Field columnSpan="1" displayName="Enable Whitelisting" name="enableWhitelisting" type="boolean">
       <RuleRef>
-        <Reference class="sailpoint.object.Rule" id="7f0000018f7b1783818f7dbf97fc0453" name="Rule-FieldValue-ReturnBooleanConfigValue"/>
+        <Reference class="sailpoint.object.Rule" name="Rule-FieldValue-ReturnBooleanConfigValue"/>
       </RuleRef>
     </Field>
     <Field columnSpan="1" displayName="Store Additional Identity Attribute" name="storeAdditionalIdAttribute" type="boolean">
       <RuleRef>
-        <Reference class="sailpoint.object.Rule" id="7f0000018f7b1783818f7dbf97fc0453" name="Rule-FieldValue-ReturnBooleanConfigValue"/>
+        <Reference class="sailpoint.object.Rule" name="Rule-FieldValue-ReturnBooleanConfigValue"/>
       </RuleRef>
     </Field>
-    <Field columnSpan="2" displayName="Additional Identity Attribute Name" name="additionalIdAttributeName" type="string">
+    <Field columnSpan="1" displayName="Store Additional Identity Attribute" name="filterOnAdditionalAttribute" type="boolean">
+      <Attributes>
+        <Map>
+          <entry key="readOnly" value="script:return true;"/>
+        </Map>
+      </Attributes>
+      <RuleRef>
+        <Reference class="sailpoint.object.Rule" name="Rule-FieldValue-ReturnBooleanConfigValue"/>
+      </RuleRef>
+    </Field>
+    <Field columnSpan="1" displayName="Additional Identity Attribute Name" name="additionalIdAttributeName" type="string">
       <Script>
         <Source>import pro.jakubiak.provisioning.simulator.ConfigHelper;
           ConfigHelper.initContext(context);
@@ -37,34 +46,47 @@
       </Script>
     </Field>
   </Section>
-  <Section name="Application Selection">
-    <Field displayName="Application" name="application" postBack="true" type="Application"/>
+  <Section columns="2" name="Application Selection">
+    <Field columnSpan="1" displayName="Application" name="application" postBack="true" type="Application">
+      <Script>
+        <Source>import sailpoint.object.Application;
+          return context.getObjects(Application.class).get(1).getId();</Source>
+      </Script>
+    </Field>
+    <Field columnSpan="1" displayName="Remove Application from Config" name="removeAppConfig" postBack="true" type="boolean"/>
   </Section>
   <Section columns="2" name="Application Configuration">
     <Field columnSpan="1" dependencies="application" displayName="Create Operation Filter" dynamic="true" multi="true" name="createFilter" type="string">
+      <Attributes>
+        <Map>
+          <entry key="readOnly" value="script:return removeAppConfig;"/>
+        </Map>
+      </Attributes>
       <Script>
         <Source>import pro.jakubiak.provisioning.simulator.ConfigHelper;
           import sailpoint.object.Application;
           Application app = context.getObject(Application.class,application);
           ConfigHelper.initContext(context);
-          if(app != null) {
-
           return ConfigHelper.getCreateFilterConfig(app.getName());
-          }</Source>
+        </Source>
       </Script>
     </Field>
-    <Field columnSpan="1" dependencies="application" dynamic="true" multi="true" displayName="Modify Operation Filter" name="modifyFilter" type="string">
+    <Field columnSpan="1" dependencies="application" displayName="Modify Operation Filter" dynamic="true" multi="true" name="modifyFilter" type="string">
+      <Attributes>
+        <Map>
+          <entry key="readOnly" value="script:return removeAppConfig;"/>
+        </Map>
+      </Attributes>
       <Script>
         <Source>import pro.jakubiak.provisioning.simulator.ConfigHelper;
           import sailpoint.object.Application;
           Application app = context.getObject(Application.class,application);
           ConfigHelper.initContext(context);
-          if(app != null) {
-          //return ConfigHelper.getModifyFilterConfig(app.getName());
-          }</Source>
+          return ConfigHelper.getModifyFilterConfig(app.getName());
+        </Source>
       </Script>
     </Field>
   </Section>
-  <Button action="next" label="Close"/>
-  <Button action="back" label="Cancel"/>
+  <Button action="next" label="Save"/>
+  <Button action="back" label="Close"/>
 </Form>

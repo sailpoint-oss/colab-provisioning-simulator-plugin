@@ -1,16 +1,34 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <!DOCTYPE Workflow PUBLIC "sailpoint.dtd" "sailpoint.dtd">
 <Workflow explicitTransitions="true" name="ProvisioningSimulator-Configure">
-  <Variable initializer="true" name="trace"/>
+  <Variable initializer="false" name="trace"/>
+  <Variable initializer="true" name="transient"/>
+  <Variable name="disableProvisioning" type="boolean"/>
+  <Variable name="saveUnfilteredRecords" type="boolean"/>
+  <Variable name="enableWhitelisting" type="boolean"/>
+  <Variable name="storeAdditionalIdAttribute" type="boolean"/>
+  <Variable name="additionalIdAttributeName" type="string"/>
+  <Variable name="application" type="string"/>
+  <Variable name="createFilter" type="string"/>
+  <Variable name="modifyFilter" type="string"/>
+
   <Step icon="Start" name="Start" posX="28" posY="10">
     <Transition to="Show Config"/>
   </Step>
   <Step icon="Stop" name="Stop" posX="334" posY="10"/>
   <Step icon="Provision" name="Save Config" posX="216" posY="10">
+    <Script>
+      <Source>
+        <![CDATA[
+        import pro.jakubiak.provisioning.simulator.ConfigHelper;
+        ConfigHelper.saveSimulatorConfig(wfcontext);
+        ]]>
+      </Source>
+    </Script>
     <Transition to="Stop"/>
   </Step>
   <Step icon="Approval" name="Show Config" posX="98" posY="10">
-    <Approval name="Provisioning Simulator Configuration" owner="ref:launcher" return="disableProvisioning,saveUnfilteredRecords,enableWhitelisting,storeAdditionalIdAttribute,additionalIdAttributeName,application,createFilter,modifyFilter" send="">
+    <Approval name="Provisioning Simulator Configuration" owner="ref:launcher" return="removeAppConfig,disableProvisioning,saveUnfilteredRecords,enableWhitelisting,storeAdditionalIdAttribute,additionalIdAttributeName,application,createFilter,modifyFilter" send="">
       <Form name="Provisioning Simulator Configuration">
         <Attributes>
           <Map>
@@ -22,5 +40,6 @@
       </Form>
     </Approval>
     <Transition to="Save Config"/>
+  </Step>
   </Step>
 </Workflow>

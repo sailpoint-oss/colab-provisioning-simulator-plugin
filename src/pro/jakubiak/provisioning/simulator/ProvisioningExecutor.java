@@ -34,6 +34,11 @@ public class ProvisioningExecutor extends AbstractIntegrationExecutor {
     private static final String STORE_ADDITIONAL_ID = "storeAdditionalId";
     private static final String OPERATION_PROVISIONED = "Provisioned";
     private static final String OPERATION_FILTERED = "Filtered";
+    private static final String PLAN_CONTAINS = "Plan contains ";
+    private static final String ACCOUNT_REQUESTS = " account requests";
+    private static final String IDENTITY_IS = "Identity is: ";
+    private static final String ADDING_RECORD_TO_THE_LIST = "Adding record to the list";
+    private static final String RECORD_ADDED = "Record added";
     private static Map<String, Object> appConfig;
     private static Boolean whitelistingEnabled = false;
     private static Map<String, List<String>> filterConfig;
@@ -66,18 +71,6 @@ public class ProvisioningExecutor extends AbstractIntegrationExecutor {
         }
     }
 
-    private void logError(String message) {
-        if (logger.isErrorEnabled()) {
-            logger.error(message);
-        }
-    }
-
-    private void logCritical(String message) {
-        if (logger.isFatalEnabled()) {
-            logger.fatal(message);
-        }
-    }
-
     /**
      * Configure.
      *
@@ -97,7 +90,7 @@ public class ProvisioningExecutor extends AbstractIntegrationExecutor {
         debug = Util.otob(integrationConfig.get(DEBUG_ENABLED));
 
         storeAdditionalId = Util.otob(integrationConfig.get(STORE_ADDITIONAL_ID));
-        if (storeAdditionalId) {
+        if (Boolean.TRUE.equals(storeAdditionalId)) {
             additionalIdAttributeName = (String) integrationConfig.get("additionalIdAttributeName");
             if (additionalIdAttributeName == null) {
                 throw new GeneralException("Required parameter: additionalIdAttributeName was not defined.");
@@ -119,9 +112,9 @@ public class ProvisioningExecutor extends AbstractIntegrationExecutor {
         List<AttributeRequest> newAttributeRequests = new ArrayList<>();
         List<AccountRequest> newAccountRequests = new ArrayList<>();
         List<AccountRequest> accountRequests = plan.getAccountRequests();
-        logDebug("Plan contains " + accountRequests.size() + " account requests");
+        logDebug(PLAN_CONTAINS + accountRequests.size() + ACCOUNT_REQUESTS);
         Identity identity = plan.getIdentity();
-        logDebug("Identity is: " + identity.getName());
+        logDebug(IDENTITY_IS + identity.getName());
         List<ProvisioningRecord> records;
         records = new ArrayList<>();
         boolean atLeastOneAttributeUnfiltered = false;
@@ -133,31 +126,31 @@ public class ProvisioningExecutor extends AbstractIntegrationExecutor {
             for (AttributeRequest attributeRequest : attributeRequests) {
                 logDebug("Processing attribute request: " + attributeRequest.toXml());
                 logDebug("Checking if attribute is on the list - " + isAttributeOnTheList(attributeRequest, accountRequest.getOperation()));
-                if (isAttributeOnTheList(attributeRequest, accountRequest.getOperation())) {
+                if (Boolean.TRUE.equals(isAttributeOnTheList(attributeRequest, accountRequest.getOperation()))) {
                     logDebug("Attribute is on the list");
                     newAttributeRequests.add(attributeRequest);
                     logDebug("Checking if isLogEverythingEnabled");
-                    if (isLogEverythingEnabled()) {
+                    if (Boolean.TRUE.equals(isLogEverythingEnabled())) {
                         logDebug("LogEverything is enabled");
-                        logDebug("Adding record to the list");
-                        if (!storeAdditionalId) {
+                        logDebug(ADDING_RECORD_TO_THE_LIST);
+                        if (Boolean.FALSE.equals(storeAdditionalId)) {
                             records.add(new ProvisioningRecord(accountRequest, attributeRequest, identity, OPERATION_PROVISIONED));
                         } else {
                             records.add(new ProvisioningRecord(accountRequest, attributeRequest, identity, OPERATION_PROVISIONED, additionalIdAttributeName));
                         }
-                        logDebug("Record added");
+                        logDebug(RECORD_ADDED);
                     }
                     logDebug("Setting atLeastOneAttributeUnfiltered to true");
                     atLeastOneAttributeUnfiltered = true;
                 } else {
                     logDebug("Attribute is not on the list");
-                    logDebug("Adding record to the list");
-                    if (!storeAdditionalId) {
+                    logDebug(ADDING_RECORD_TO_THE_LIST);
+                    if (Boolean.FALSE.equals(storeAdditionalId)) {
                         records.add(new ProvisioningRecord(accountRequest, attributeRequest, identity, OPERATION_FILTERED));
                     } else {
                         records.add(new ProvisioningRecord(accountRequest, attributeRequest, identity, OPERATION_FILTERED, additionalIdAttributeName));
                     }
-                    logDebug("Record added");
+                    logDebug(RECORD_ADDED);
                     logDebug("Removing attribute from the account request");
                 }
             }
@@ -165,7 +158,7 @@ public class ProvisioningExecutor extends AbstractIntegrationExecutor {
             logDebug("AccountRequest after removal - " + accountRequest.toXml());
 
             logDebug("Checking if isCreationFiltered");
-            if (isCreationFiltered() && !atLeastOneAttributeUnfiltered) {
+            if (Boolean.TRUE.equals(isCreationFiltered()) && !atLeastOneAttributeUnfiltered) {
                 logDebug("Creation is filtered and no attribute is unfiltered");
             } else {
                 logDebug("Creation is not filtered or at least one attribute is unfiltered");
@@ -192,9 +185,9 @@ public class ProvisioningExecutor extends AbstractIntegrationExecutor {
         List<AttributeRequest> newAttributeRequests = new ArrayList<>();
         List<AccountRequest> newAccountRequests = new ArrayList<>();
         List<AccountRequest> accountRequests = plan.getAccountRequests();
-        logDebug("Plan contains " + accountRequests.size() + " account requests");
+        logDebug(PLAN_CONTAINS + accountRequests.size() + ACCOUNT_REQUESTS);
         Identity identity = plan.getIdentity();
-        logDebug("Identity is: " + identity.getName());
+        logDebug(IDENTITY_IS + identity.getName());
         List<ProvisioningRecord> records = new ArrayList<>();
         boolean atLeastOneAttributeUnfiltered = false;
         logDebug("Processing account requests");
@@ -205,31 +198,31 @@ public class ProvisioningExecutor extends AbstractIntegrationExecutor {
             for (AttributeRequest attributeRequest : attributeRequests) {
                 logDebug("Processing attribute request: " + attributeRequest.toXml());
                 logDebug("Checking if attribute is on the list - " + isAttributeOnTheList(attributeRequest, accountRequest.getOperation()));
-                if (!isAttributeOnTheList(attributeRequest, accountRequest.getOperation())) {
+                if (Boolean.FALSE.equals(isAttributeOnTheList(attributeRequest, accountRequest.getOperation()))) {
                     logDebug("Attribute is not on the list");
                     newAttributeRequests.add(attributeRequest);
                     logDebug("Checking if isLogEverythingEnabled");
-                    if (isLogEverythingEnabled()) {
+                    if (Boolean.TRUE.equals(isLogEverythingEnabled())) {
                         logDebug("LogEverything is enabled");
-                        logDebug("Adding record to the list");
-                        if (!storeAdditionalId) {
+                        logDebug(ADDING_RECORD_TO_THE_LIST);
+                        if (Boolean.FALSE.equals(storeAdditionalId)) {
                             records.add(new ProvisioningRecord(accountRequest, attributeRequest, identity, OPERATION_PROVISIONED));
                         } else {
                             records.add(new ProvisioningRecord(accountRequest, attributeRequest, identity, OPERATION_PROVISIONED, additionalIdAttributeName));
                         }
-                        logDebug("Record added");
+                        logDebug(RECORD_ADDED);
                     }
                     logDebug("Setting atLeastOneAttributeUnfiltered to true");
                     atLeastOneAttributeUnfiltered = true;
                 } else {
                     logDebug("Attribute is on the list");
-                    logDebug("Adding record to the list");
-                    if (!storeAdditionalId) {
+                    logDebug(ADDING_RECORD_TO_THE_LIST);
+                    if (Boolean.FALSE.equals(storeAdditionalId)) {
                         records.add(new ProvisioningRecord(accountRequest, attributeRequest, identity, OPERATION_FILTERED));
                     } else {
                         records.add(new ProvisioningRecord(accountRequest, attributeRequest, identity, OPERATION_FILTERED, additionalIdAttributeName));
                     }
-                    logDebug("Record added");
+                    logDebug(RECORD_ADDED);
                     logDebug("Removing attribute from the account request");
                 }
             }
@@ -237,7 +230,7 @@ public class ProvisioningExecutor extends AbstractIntegrationExecutor {
             logDebug("AccountRequest after removal - " + accountRequest.toXml());
 
             logDebug("Checking if isCreationFiltered");
-            if (isCreationFiltered() && !atLeastOneAttributeUnfiltered) {
+            if (Boolean.TRUE.equals(isCreationFiltered()) && !atLeastOneAttributeUnfiltered) {
                 logDebug("Creation is filtered and no attribute is unfiltered");
             } else {
                 logDebug("Creation is not filtered or at least one attribute is unfiltered");
@@ -261,12 +254,15 @@ public class ProvisioningExecutor extends AbstractIntegrationExecutor {
     private Boolean isAttributeOnTheList(ProvisioningPlan.AttributeRequest attributeRequest, ProvisioningPlan.AccountRequest.Operation operation) {
         List<String> filterAttributes = filterConfig.get(operation.toString());
         String attributeName = attributeRequest.getName();
+        if(filterAttributes == null) {
+            return false;
+        }
         return filterAttributes.contains(attributeName);
     }
 
     private Boolean isCreationFiltered() {
         Boolean createConfigPresent = filterConfig.get("Create") != null;
-        if (isWhitelistingEnabled()) {
+        if (Boolean.TRUE.equals(isWhitelistingEnabled())) {
             return !createConfigPresent;
         }
         return createConfigPresent;
@@ -288,10 +284,10 @@ public class ProvisioningExecutor extends AbstractIntegrationExecutor {
         // Make any necessary modifications to the plan, here.
         Map<String, List<String>> selectedAppConfig;
         Identity identity = plan.getIdentity();
-        logDebug("Identity is: " + identity.getName());
+        logDebug(IDENTITY_IS + identity.getName());
         logDebug("Processing provisioning plan: " + plan.toXml());
         // filter out all attributes
-        logDebug("Plan contains " + plan.getAccountRequests().size() + " account requests");
+        logDebug(PLAN_CONTAINS + plan.getAccountRequests().size() + ACCOUNT_REQUESTS);
         String applicationName = plan.getAccountRequests().get(0).getApplicationName();
         logDebug("Application name: " + applicationName);
         logDebug("Initilizing filterConfig");
@@ -307,7 +303,7 @@ public class ProvisioningExecutor extends AbstractIntegrationExecutor {
         }
         logDebug("FilterConfig: " + filterConfig.toString());
 
-        if (whitelistingEnabled) {
+        if (Boolean.TRUE.equals(whitelistingEnabled)) {
             logDebug("Whitelisting enabled");
             newPlan = processWhitelistingProvisioningPlan(plan, _context);
             logDebug("After whitelisting provisioning plan: " + newPlan.toXml());
@@ -317,13 +313,14 @@ public class ProvisioningExecutor extends AbstractIntegrationExecutor {
             logDebug("After blacklisting provisioning plan: " + newPlan.toXml());
         }
         // execute provisioning
-        if (!debug) {
+        if (Boolean.FALSE.equals(debug)) {
             logDebug("Integration works in PRODUCTION mode");
             List<ProvisioningPlan.AccountRequest> accountRequests = newPlan.getAccountRequests();
             for (ProvisioningPlan.AccountRequest accountRequest : accountRequests) {
                 logDebug("Before connector provision call");
                 Connector conn = ConnectorFactory.getConnector(_context.getObject(Application.class, accountRequest.getApplicationName()), null);
                 conn.provision(newPlan);
+
                 logDebug("After connector provision call");
             }
         } else {
@@ -341,29 +338,7 @@ public class ProvisioningExecutor extends AbstractIntegrationExecutor {
         return result;
     }
 
-    /**
-     * Configure.
-     *
-     * @param args the args
-     * @throws Exception the exception
-     */
-    @Override
-    public void configure(@SuppressWarnings("rawtypes") Map args) throws Exception {
-        super.configure(args);
-    }
-
-    /**
-     * Ping string.
-     *
-     * @return the string
-     * @throws Exception the exception
-     */
-    @Override
-    public String ping() throws Exception {
-        return super.ping();
-    }
-
-    /**
+       /**
      * Gets request status.
      *
      * @param requestID the request id
@@ -403,27 +378,5 @@ public class ProvisioningExecutor extends AbstractIntegrationExecutor {
         return requestResult;
     }
 
-    /**
-     * Check status provisioning result.
-     *
-     * @param requestId the request id
-     * @return the provisioning result
-     * @throws Exception the exception
-     */
-    @Override
-    public ProvisioningResult checkStatus(String requestId) throws Exception {
-        return super.checkStatus(requestId);
-    }
 
-    /**
-     * Should retry boolean.
-     *
-     * @param ex             the ex
-     * @param retryErrorList the retry error list
-     * @return the boolean
-     */
-    @Override
-    public boolean shouldRetry(Exception ex, List<String> retryErrorList) {
-        return super.shouldRetry(ex, retryErrorList);
-    }
 }
