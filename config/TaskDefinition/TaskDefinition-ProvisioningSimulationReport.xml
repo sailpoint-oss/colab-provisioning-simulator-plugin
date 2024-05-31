@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE TaskDefinition PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<TaskDefinition executor="sailpoint.reporting.LiveReportExecutor" name="Provisioning Records Report" progressMode="Percentage" resultAction="Rename" subType="Provisioning Simulator" template="true" type="LiveReport">
+  <Attributes>
+    <Map>
+      <entry key="report">
+        <value>
+          <LiveReport title="Provisioning Simulation Records Report">
+            <DataSource objectType="pro.jakubiak.provisioning.simulator.ProvisioningRecord" type="Filter">
+              <OptionsScript>
+                <Source>
+                  import sailpoint.object.Filter;
+                  import sailpoint.object.Identity;
+                  import sailpoint.object.Application;
+                  import sailpoint.tools.Util;
+                  Filter f1;
+                  String identity = args.get("identity");
+                  if(identity != null) {
+                    f1 = Filter.eq("identity.id", identity);
+                  }
+
+                  Application application = args.get("application");
+                  if(application != null) {
+                    String applicationName = application.getName();
+                    if(f1 == null) {
+                        f1 = Filter.eq("applicationName", applicationName);
+                    } else {
+                        f1 = Filter.and(f1,Filter.eq("applicationName", applicationName));
+                    }
+                  }
+                  Date startDate = args.get("startDate");
+                  if(startDate != null) {
+                    if(f1 == null) {
+                        f1 = Filter.ge("created", startDate);
+                    } else {
+                      f1 = Filter.and(f1, Filter.ge("created", startDate));
+                    }
+                  }
+                  Date endDate = args.get("endDate");
+                  if(endDate != null) {
+                    if(f1 == null) {
+                      f1 = Filter.le("created", endDate);
+                    } else {
+                      f1 = Filter.and(f1, Filter.le("created", endDate));
+                    }
+                  }
+
+                  if(f1 != null) {
+                      options.add(f1);
+                  }
+                  return options;
+                </Source>
+              </OptionsScript>
+            </DataSource>
+            <Columns>
+              <ReportColumnConfig field="identityName" header="Identity Name" property="identityName" sortable="true" width="32"/>
+              <ReportColumnConfig field="nativeIdentity" header="Native Identity" property="nativeIdentity" sortable="true" width="32"/>
+              <ReportColumnConfig field="applicationName" header="Application Name" property="applicationName" sortable="true" width="32"/>
+              <ReportColumnConfig field="operation" header="Operation" property="operation" sortable="true" width="32"/>
+              <ReportColumnConfig field="oldValue" header="Old Value" property="oldValue" width="32"/>
+              <ReportColumnConfig field="newValue" header="New Value" property="newValue" width="32"/>
+              <ReportColumnConfig field="provisioningStatus" header="Provisioning Status" property="provisioningStatus" sortable="true" width="32"/>
+              <ReportColumnConfig field="attributeName" header="Attribute Name" property="attributeName" sortable="true" width="32"/>
+              <ReportColumnConfig field="suppId" header="Supplementary Identity Attribute" property="identitySupplId" width="32"/>
+            </Columns>
+          </LiveReport>
+        </value>
+      </entry>
+    </Map>
+  </Attributes>
+  <Description>Displays the name and full/part time status of users with the given first name</Description>
+  <Signature>
+    <Inputs>
+      <Argument name="identity" filterString="workgroup==false" type="Identity">
+        <Prompt>Identity</Prompt>
+      </Argument>
+      <Argument name="application" type="Application">
+        <Prompt>Application</Prompt>
+      </Argument>
+      <Argument name="startDate" type="date">
+        <Prompt>Start Date</Prompt>
+      </Argument>
+      <Argument name="endDate" type="date">
+        <Prompt>End Date</Prompt>
+      </Argument>
+
+    </Inputs>
+  </Signature>
+</TaskDefinition>
