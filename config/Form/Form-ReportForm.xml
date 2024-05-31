@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE Form PUBLIC "sailpoint.dtd" "sailpoint.dtd">
+<Form name="Provisioning Simulator Report">
+  <Attributes>
+    <Map>
+      <entry key="includeHiddenFields" value="true"/>
+      <entry key="pageTitle" value="Provisioning Simulator Report Configuration"/>
+    </Map>
+  </Attributes>
+  <Section label="Simulator Results Filtering" name="customStuff">
+    <Field displayName="Identity" type="Identity" name="identity" value="ref:identity"/>
+    <Field displayName="Application"  type="Application" name="applicationName" value="ref:application"/>
+    <Field displayName="Start date" type="Date" name="startDate" value="ref:startDate"/>
+    <Field displayName="End date" type="Date" name="endDate" value="ref:endDate"/>
+  </Section>
+</Form>
