@@ -20,10 +20,7 @@ import java.util.*;
  * The type Provisioning executor.
  */
 public class ProvisioningExecutor extends AbstractIntegrationExecutor {
-    /**
-     * The constant logger.
-     */
-    public static final Log logger = LogFactory.getLog(ProvisioningExecutor.class);
+    private static final Log logger = LogFactory.getLog(ProvisioningExecutor.class);
 
     private static final String INTEGRATION_CONFIG = "integrationConfig";
     private static final String APP_CONFIG = "appConfig";
@@ -71,13 +68,6 @@ public class ProvisioningExecutor extends AbstractIntegrationExecutor {
         }
     }
 
-    /**
-     * Configure.
-     *
-     * @param context the context
-     * @param config  the config
-     * @throws Exception the exception
-     */
     @Override
     public void configure(SailPointContext context, IntegrationConfig config) throws Exception {
         super.configure(context, config);
@@ -108,7 +98,7 @@ public class ProvisioningExecutor extends AbstractIntegrationExecutor {
     private ProvisioningPlan processWhitelistingProvisioningPlan(ProvisioningPlan oldPlan, SailPointContext context) throws GeneralException {
         logDebug("Started whitelisting processing");
         ProvisioningPlan plan = new ProvisioningPlan(oldPlan);
-        
+
         List<AttributeRequest> newAttributeRequests = new ArrayList<>();
         List<AccountRequest> newAccountRequests = new ArrayList<>();
         List<AccountRequest> accountRequests = plan.getAccountRequests();
@@ -254,7 +244,7 @@ public class ProvisioningExecutor extends AbstractIntegrationExecutor {
     private Boolean isAttributeOnTheList(ProvisioningPlan.AttributeRequest attributeRequest, ProvisioningPlan.AccountRequest.Operation operation) {
         List<String> filterAttributes = filterConfig.get(operation.toString());
         String attributeName = attributeRequest.getName();
-        if(filterAttributes == null) {
+        if (filterAttributes == null) {
             return false;
         }
         return filterAttributes.contains(attributeName);
@@ -268,13 +258,6 @@ public class ProvisioningExecutor extends AbstractIntegrationExecutor {
         return createConfigPresent;
     }
 
-    /**
-     * Provision provisioning result.
-     *
-     * @param plan the plan
-     * @return the provisioning result
-     * @throws Exception the exception
-     */
     @Override
     public ProvisioningResult provision(ProvisioningPlan plan) throws Exception {
         if (plan == null) {
@@ -338,13 +321,6 @@ public class ProvisioningExecutor extends AbstractIntegrationExecutor {
         return result;
     }
 
-       /**
-     * Gets request status.
-     *
-     * @param requestID the request id
-     * @return the request status
-     * @throws Exception the exception
-     */
     @Override
     public RequestResult getRequestStatus(String requestID) throws Exception {
         if (Util.isEmpty(requestID)) {
