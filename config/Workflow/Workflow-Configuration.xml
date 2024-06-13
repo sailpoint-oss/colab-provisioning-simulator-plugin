@@ -41,5 +41,4 @@
     </Approval>
     <Transition to="Save Config"/>
   </Step>
-  </Step>
 </Workflow>

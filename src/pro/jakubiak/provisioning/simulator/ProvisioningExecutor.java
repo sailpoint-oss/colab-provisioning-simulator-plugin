@@ -300,10 +300,12 @@ public class ProvisioningExecutor extends AbstractIntegrationExecutor {
             logDebug("Integration works in PRODUCTION mode");
             List<ProvisioningPlan.AccountRequest> accountRequests = newPlan.getAccountRequests();
             for (ProvisioningPlan.AccountRequest accountRequest : accountRequests) {
+                List<AttributeRequest> attributeRequests = accountRequest.getAttributeRequests();
+                if(attributeRequests != null && !attributeRequests.isEmpty()){
                 logDebug("Before connector provision call");
                 Connector conn = ConnectorFactory.getConnector(_context.getObject(Application.class, accountRequest.getApplicationName()), null);
                 conn.provision(newPlan);
-
+                }
                 logDebug("After connector provision call");
             }
         } else {
