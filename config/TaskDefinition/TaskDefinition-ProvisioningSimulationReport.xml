@@ -19,7 +19,8 @@
                     f1 = Filter.eq("identity.id", identity);
                   }
 
-                  Application application = args.get("application");
+                  String applicationNameOrId = args.get("application");
+                  Application application = context.getObject(Application.class,applicationNameOrId);
                   if(application != null) {
                     String applicationName = application.getName();
                     if(f1 == null) {

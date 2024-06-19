@@ -1,12 +1,9 @@
 package pro.jakubiak.provisioning.simulator;
 
 import sailpoint.api.SailPointContext;
-import sailpoint.object.Identity;
-import sailpoint.object.Link;
-import sailpoint.object.ProvisioningPlan;
-import sailpoint.object.SailPointObject;
+import sailpoint.object.*;
 import sailpoint.tools.GeneralException;
-import sailpoint.object.AuditEvent;
+
 import java.util.List;
 
 /**
@@ -14,7 +11,7 @@ import java.util.List;
  */
 public class ProvisioningRecord extends SailPointObject {
     private static final long serialVersionUID = 1L;
-    private Identity identity;
+    private Identity identityId;
     private String identitySupplId;
     private String identityName;
     private String applicationName;
@@ -36,20 +33,20 @@ public class ProvisioningRecord extends SailPointObject {
      *
      * @param accountRequest   the account request
      * @param attributeRequest the attribute request
-     * @param identity         the identity
+     * @param identityId         the identity
      * @param status           the status
      * @param identitySupplId  the identity suppl id
      */
-    public ProvisioningRecord(ProvisioningPlan.AccountRequest accountRequest, ProvisioningPlan.AttributeRequest attributeRequest, Identity identity, String status, String identitySupplId) {
-        this.identitySupplId = (String) identity.getAttribute(identitySupplId);
-        this.identity = identity;
-        this.identityName = identity.getName();
+    public ProvisioningRecord(ProvisioningPlan.AccountRequest accountRequest, ProvisioningPlan.AttributeRequest attributeRequest, Identity identityId, String status, String identitySupplId) {
+        this.identitySupplId = (String) identityId.getAttribute(identitySupplId);
+        this.identityId = identityId;
+        this.identityName = identityId.getName();
         this.applicationName = accountRequest.getApplicationName();
         this.nativeIdentity = accountRequest.getNativeIdentity();
         this.operation = accountRequest.getOperation().toString();
         this.attributeName = attributeRequest.getName();
         this.provisioningStatus = status;
-        List<Link> links = identity.getLinks();
+        List<Link> links = identityId.getLinks();
         for (Link link : links) {
             if (link.getApplicationName().equals(accountRequest.getApplicationName())) {
                 if (link.getNativeIdentity().equals(accountRequest.getNativeIdentity())) {
@@ -62,29 +59,30 @@ public class ProvisioningRecord extends SailPointObject {
         this.newValue = attributeRequest.getValue();
         AuditEvent auditEvent = new AuditEvent();
         auditEvent.setAction("update");
-        auditEvent.setTarget(identity.getName());
+        auditEvent.setTarget(identityId.getName());
         auditEvent.setAttributeName(attributeName);
         auditEvent.setAttribute("oldValue", oldValue);
         auditEvent.setAttribute("newValue", newValue);
 
     }
-        /**
+
+    /**
      * Instantiates a new Provisioning record.
      *
      * @param accountRequest   the account request
      * @param attributeRequest the attribute request
-     * @param identity         the identity
+     * @param identityId         the identity
      * @param status           the status
      */
-    public ProvisioningRecord(ProvisioningPlan.AccountRequest accountRequest, ProvisioningPlan.AttributeRequest attributeRequest, Identity identity, String status) {
-        this.identity = identity;
-        this.identityName = identity.getName();
+    public ProvisioningRecord(ProvisioningPlan.AccountRequest accountRequest, ProvisioningPlan.AttributeRequest attributeRequest, Identity identityId, String status) {
+        this.identityId = identityId;
+        this.identityName = identityId.getName();
         this.applicationName = accountRequest.getApplicationName();
         this.nativeIdentity = accountRequest.getNativeIdentity();
         this.operation = accountRequest.getOperation().toString();
         this.attributeName = attributeRequest.getName();
         this.provisioningStatus = status;
-        List<Link> links = identity.getLinks();
+        List<Link> links = identityId.getLinks();
         for (Link link : links) {
             if (link.getApplicationName().equals(accountRequest.getApplicationName())) {
                 if (link.getNativeIdentity().equals(accountRequest.getNativeIdentity())) {
@@ -100,7 +98,7 @@ public class ProvisioningRecord extends SailPointObject {
     /**
      * Instantiates a new Provisioning record.
      *
-     * @param identity        the identity
+     * @param identityId        the identity
      * @param identitySupplId the identity suppl id
      * @param identityName    the identity name
      * @param applicationName the application name
@@ -109,8 +107,8 @@ public class ProvisioningRecord extends SailPointObject {
      * @param oldValue        the old value
      * @param newValue        the new value
      */
-    public ProvisioningRecord(Identity identity, String identitySupplId, String identityName, String applicationName, String nativeIdentity, String operation, String oldValue, String newValue) {
-        this.identity = identity;
+    public ProvisioningRecord(Identity identityId, String identitySupplId, String identityName, String applicationName, String nativeIdentity, String operation, String oldValue, String newValue) {
+        this.identityId = identityId;
         this.identitySupplId = identitySupplId;
         this.identityName = identityName;
         this.applicationName = applicationName;
@@ -123,10 +121,10 @@ public class ProvisioningRecord extends SailPointObject {
     /**
      * Instantiates a new Provisioning record.
      *
-     * @param identity the identity
+     * @param identityId the identity
      */
-    public ProvisioningRecord(Identity identity) {
-        this.identity = identity;
+    public ProvisioningRecord(Identity identityId) {
+        this.identityId = identityId;
     }
 
     /**
@@ -183,17 +181,17 @@ public class ProvisioningRecord extends SailPointObject {
      *
      * @return the identity
      */
-    public Identity getIdentity() {
-        return identity;
+    public Identity getIdentityId() {
+        return identityId;
     }
 
     /**
      * Sets identity.
      *
-     * @param identity the identity
+     * @param identityId the identity
      */
-    public void setIdentity(Identity identity) {
-        this.identity = identity;
+    public void setIdentityId(Identity identityId) {
+        this.identityId = identityId;
     }
 
     /**
@@ -271,7 +269,7 @@ public class ProvisioningRecord extends SailPointObject {
     @Override
     public String toString() {
         return "ProvisioningRecord{" +
-                "identity=" + identity +
+                "identity=" + identityId +
                 ", identitySupplId='" + identitySupplId + '\'' +
                 ", identityName='" + identityName + '\'' +
                 ", applicationName='" + applicationName + '\'' +
