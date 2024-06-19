@@ -244,7 +244,7 @@ public class ProvisioningExecutor extends AbstractIntegrationExecutor {
     private Boolean isAttributeOnTheList(ProvisioningPlan.AttributeRequest attributeRequest, ProvisioningPlan.AccountRequest.Operation operation) {
         List<String> filterAttributes = filterConfig.get(operation.toString());
         String attributeName = attributeRequest.getName();
-        if (filterAttributes == null) {
+        if (filterAttributes == null || filterAttributes.isEmpty()) {
             return false;
         }
         return filterAttributes.contains(attributeName);
