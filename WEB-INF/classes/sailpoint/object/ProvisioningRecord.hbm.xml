@@ -9,10 +9,10 @@
         &SailPointObjectSimple;
         <many-to-one name="identityId" class="sailpoint.object.Identity"/>
         <property name="applicationName" type="string" length="128" index="spt_provisioning_record_application_name"/>
-        <property name="nativeIdentity" type="string" length="128"/>
+        <property name="nativeIdentity" type="string" length="1024"/>
         <property name="operation" type="string" length="128" index="spt_provisioning_record_operation_name"/>
-        <property name="oldValue" type="string" length="128"/>
-        <property name="newValue" type="string" length="128"/>
+        <property name="oldValue" type="string" length="10240"/>
+        <property name="newValue" type="string" length="10240"/>
         <property name="identitySupplId" type="string" length="128"/>
         <property name="identityName" type="string" length="128" index="spt_provisioning_record_identity_name"/>
         <property name="provisioningStatus" type="string" length="128" index="spt_provisioning_record_provisioning_status"/>
