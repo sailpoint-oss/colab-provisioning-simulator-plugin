@@ -3,6 +3,7 @@ package pro.jakubiak.provisioning.simulator;
 import sailpoint.api.SailPointContext;
 import sailpoint.object.*;
 import sailpoint.tools.GeneralException;
+import sailpoint.tools.Util;
 
 import java.util.List;
 
@@ -18,8 +19,8 @@ public class ProvisioningRecord extends SailPointObject {
     private String nativeIdentity;
     private String operation;
     private String provisioningStatus;
-    private Object oldValue;
-    private Object newValue;
+    private String oldValue;
+    private String newValue;
     private String attributeName;
 
     /**
@@ -50,13 +51,13 @@ public class ProvisioningRecord extends SailPointObject {
         for (Link link : links) {
             if (link.getApplicationName().equals(accountRequest.getApplicationName())) {
                 if (link.getNativeIdentity().equals(accountRequest.getNativeIdentity())) {
-                    this.oldValue = link.getAttribute(attributeRequest.getName());
+                    this.oldValue = Util.otos(link.getAttribute(attributeRequest.getName()));
                     break;
                 }
             }
         }
 
-        this.newValue = attributeRequest.getValue();
+        this.newValue = Util.otos(attributeRequest.getValue());
         AuditEvent auditEvent = new AuditEvent();
         auditEvent.setAction("update");
         auditEvent.setTarget(identityId.getName());
@@ -86,13 +87,13 @@ public class ProvisioningRecord extends SailPointObject {
         for (Link link : links) {
             if (link.getApplicationName().equals(accountRequest.getApplicationName())) {
                 if (link.getNativeIdentity().equals(accountRequest.getNativeIdentity())) {
-                    this.oldValue = link.getAttribute(attributeRequest.getName());
+                    this.oldValue = Util.otos(link.getAttribute(attributeRequest.getName()));
                     break;
                 }
             }
         }
 
-        this.newValue = attributeRequest.getValue();
+        this.newValue = Util.otos(attributeRequest.getValue());
     }
 
     /**
@@ -312,15 +313,6 @@ public class ProvisioningRecord extends SailPointObject {
      *
      * @param oldValue the old value
      */
-    public void setOldValue(Object oldValue) {
-        this.oldValue = oldValue;
-    }
-
-    /**
-     * Sets old value.
-     *
-     * @param oldValue the old value
-     */
     public void setOldValue(String oldValue) {
         this.oldValue = oldValue;
     }
@@ -334,16 +326,7 @@ public class ProvisioningRecord extends SailPointObject {
         return newValue;
     }
 
-    /**
-     * Sets new value.
-     *
-     * @param newValue the new value
-     */
-    public void setNewValue(Object newValue) {
-        this.newValue = newValue;
-    }
-
-    /**
+       /**
      * Sets new value.
      *
      * @param newValue the new value
