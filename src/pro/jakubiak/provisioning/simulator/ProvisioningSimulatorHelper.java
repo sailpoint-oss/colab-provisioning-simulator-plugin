@@ -20,6 +20,7 @@ public class ProvisioningSimulatorHelper {
      * @param records the records
      * @throws GeneralException the general exception
      */
+
     protected static void storeTransactions(SailPointContext context, List<ProvisioningRecord> records) throws GeneralException {
         context.startTransaction();
         logger.debug("Storing provisioning records " + records.size());
