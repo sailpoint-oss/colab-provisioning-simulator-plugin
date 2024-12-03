@@ -88,12 +88,15 @@ public class ProvisioningRecord extends SailPointObject {
             if (link.getApplicationName().equals(accountRequest.getApplicationName())) {
                 if (link.getNativeIdentity().equals(accountRequest.getNativeIdentity())) {
                     this.oldValue = Util.otos(link.getAttribute(attributeRequest.getName()));
+                    if(this.oldValue.length()>4096)
+                        this.oldValue = this.oldValue.substring(0, 4080)+" (TRUNC)";
                     break;
                 }
             }
         }
-
         this.newValue = Util.otos(attributeRequest.getValue());
+        if(this.newValue.length()>4096)
+            this.newValue = this.newValue.substring(0, 4080)+" (TRUNC)";
     }
 
     /**
@@ -280,7 +283,9 @@ public class ProvisioningRecord extends SailPointObject {
                 ", newValue='" + newValue + '\'' +
                 '}';
     }
-
+    public ProvisioningRecord deepCopy() {
+        return new ProvisioningRecord(identityId, identitySupplId, identityName, applicationName, nativeIdentity, operation, oldValue, newValue);
+    }
     /**
      * Gets identity suppl id.
      *
